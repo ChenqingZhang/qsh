@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="qsh.mapper.UserMapper">
+    <!--注册用户-->
+    <insert id="save" parameterType="qsh.model.User">
+        INSERT INTO qsh.user (id, name, username, password)
+        VALUES (#{id}, #{name}, #{username}, #{password})
+    </insert>
+
+    <!--保存角色-->
+    <insert id="saveRoles" parameterType="map">
+        INSERT INTO qsh.user_role (USER_ID, ROLE_ID) VALUES
+        <foreach collection="roleIds" separator="," item="item">
+            (#{id},#{item})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="qsh.model.User">
+        UPDATE qsh.user
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="password !=null">
+                password = #{password},
+            </if>
+            modify_time = now(),
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="deleteById">
+        DELETE FROM qsh.user
+        WHERE ID = #{id}
+    </delete>
+
+    <delete id="deleteRoles">
+        DELETE FROM qsh.user_role
+        WHERE USER_ID = #{id}
+    </delete>
+
+    <!--登录-->
+    <select id="login" resultType="qsh.model.User">
+        SELECT *
+        FROM qsh.user
+        WHERE username = #{username} AND password = #{password}
+    </select>
+
+    <!--统计用户名-->
+    <select id="countUserName" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM qsh.user
+        WHERE username = #{username}
+    </select>
+
+    <!--查询用户-->
+    <select id="findUser" parameterType="map" resultType="qsh.model.User">
+        SELECT * FROM qsh.user
+        <where>
+            <if test="username != null">
+                and username like CONCAT('%',#{username},'%')
+            </if>
+        </where>
+        <if test="order != null">
+            order by ${sort} ${order}
+        </if>
+
+    </select>
+
+    <!--用户的角色-->
+    <select id="getUserRoleIds" resultType="java.lang.Long">
+        SELECT ROLE_ID
+        FROM qsh.user_role
+        WHERE USER_ID = #{id}
+    </select>
+
+    <!-- 用户的角色名称-->
+    <select id="getUserRoleNames" resultType="java.lang.String">
+        SELECT r.name
+        FROM qsh.role r INNER JOIN qsh.user_role ur ON r.ID = ur.ROLE_ID
+        WHERE ur.user_id = #{id}
+    </select>
+
+    <select id="getById" resultType="qsh.model.User">
+        SELECT *
+        FROM qsh.user
+        WHERE id = #{id}
+    </select>
+
+</mapper>

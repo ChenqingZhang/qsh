@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="qsh.mapper.BusinessMapper">
+    <resultMap id="BaseResultMap" type="qsh.model.Business">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" javaType="java.sql.Date"/>
+        <result column="modifyTime" property="modifyTime" javaType="java.sql.Date"/>
+        <result column="signinTime" property="signinTime" javaType="java.sql.Date"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="item" property="address" jdbcType="VARCHAR"/>
+        <result column="signinTime" property="signinTime" jdbcType="INTEGER"/>
+        <result column="businessType" property="businessType" jdbcType="INTEGER"/>
+    </resultMap>
+    <insert id="save" parameterType="qsh.model.Business">
+        INSERT INTO member (ID, CREATETIME, MODIFYTIME, SINGNINTIME, MOBILE, ITEM, BUSINESSTYPE, SIGNINSTATUS) VALUES (#{id}, #{createTime}, #{modifyTime}, #{signTime}, #{mobile}, #{item}, #{businessType}, #{signinStatus})
+    </insert>
+    <update id="update" parameterType="qsh.model.Business">
+        UPDATE business
+        SET signinStatus = #{signinStatus}, mobile = #{mobile}, item = #{item}, businessType = #{businessType}
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteById">
+        DELETE FROM business WHERE ID = #{id}
+    </delete>
+
+    <select id="getById" resultType="qsh.model.Business">
+        SELECT * FROM business WHERE ID = #{id}
+    </select>
+    <select id="getBusinessList" resultType="qsh.model.Business">
+        SELECT * FROM business
+    </select>
+</mapper>

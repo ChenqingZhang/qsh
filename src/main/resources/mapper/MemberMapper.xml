@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="qsh.mapper.MemberMapper">
+    <resultMap id="BaseResultMap" type="qsh.model.Member">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" javaType="java.sql.Date"/>
+        <result column="modifyTime" property="modifyTime" javaType="java.sql.Date"/>
+        <result column="memberTime" property="memberTime" javaType="java.sql.Date"/>
+        <result column="company" property="company" jdbcType="VARCHAR"/>
+        <result column="principal" property="principal" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="memberStatus" property="memberStatus" jdbcType="INTEGER"/>
+
+    </resultMap>
+    <insert id="save" parameterType="qsh.model.Member">
+        INSERT INTO member (ID, CREATETIME, MODIFYTIME, MEMBERTIME, COMPANY, PRINCIPAL, MOBILE, ADDRESS, MEMBERSTATUS) VALUES (#{id}, #{createTime}, #{modifyTime}, #{memberTime}, #{company}, #{principal}, #{mobile}, #{address}, #{memberStatus})
+    </insert>
+    <update id="update" parameterType="qsh.model.Member">
+        UPDATE member
+        SET company = #{company}, principal = #{principal}, address = #{address}, memberStatus = #{memberStatus}
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteById">
+        DELETE FROM member WHERE ID = #{id}
+    </delete>
+
+    <select id="getById" resultType="qsh.model.Member">
+        SELECT * FROM member WHERE ID = #{id}
+    </select>
+    <select id="getMemberList" resultType="qsh.model.Member">
+        SELECT * FROM member
+    </select>
+</mapper>
